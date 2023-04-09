@@ -1,28 +1,23 @@
 #!flask/bin/python
-from flask import Flask, jsonify
+from flask import Flask, render_template, jsonify
+from flask_login import LoginManager
+from tech import db_session, users
 
-app = Flask(__name__)
-
-tasks = [
-    {
-        'id': 1,
-        'title': u'Buy groceries',
-        'description': u'Milk, Cheese, Pizza, Fruit, Tylenol',
-        'done': False
-    },
-    {
-        'id': 2,
-        'title': u'Learn Python',
-        'description': u'Need to find a good Python tutorial on the web',
-        'done': False
-    }
-]
+app = Flask(__name__, template_folder='templates')
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+app.secret_key = 'secret_key'
 
 
-@app.route('/todo/api/v1.0/tasks', methods=['GET'])
-def get_tasks():
-    return jsonify({'tasks': tasks})
+@app.route('/')
+def home_page():
+    return render_template('index.html', name='abanon')
+
+
+@app.route('/reg')
+def reg():
+    return render_template()
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=8080, host='127.0.0.1')

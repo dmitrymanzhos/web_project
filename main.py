@@ -3,8 +3,14 @@ from telegram.ext import CommandHandler
 import logging
 from telegram.ext import Application, MessageHandler, filters
 import datetime
-import subprocess
-from app import run_app
+from subprocess import Popen
+import flask
+from multiprocessing import Process
+server = Process(target=app.run)
+server.start()
+# ...
+server.terminate()
+server.join()
 
 with open('data/APIKEY.txt', encoding='utf-8') as f:
     APIKEY = f.read().rstrip('\n')
@@ -36,8 +42,9 @@ async def open(update, context):
     """Открывает ссылку"""
     # subprocess.call(['python', 'app.py'])
     # subprocess.Popen(args=["start", "python", 'app.py'], shell=True, stdout=subprocess.PIPE)
-    await update.message.reply_text(f"http://127.0.0.1:8080")
+    await update.message.reply_text(f"http://127.0.0.1:8080/index")
     run_app()
+    # Popen('python app.py')
     # open_()
 
 
@@ -53,6 +60,23 @@ def main():
     # application.add_handler(CommandHandler('date', date))
 
     application.run_polling()
+
+
+def run_app():
+    app = flask.Flask(__name__)
+
+    @app.route('/')
+    def start():
+        return 'Миссия Колонизация Марса'
+
+    @app.route('/index')
+    def index():
+        return "И на Марсе будут яблони цвести!"
+
+    if __name__ == '__main__':
+        app.run(port=8080, host='127.0.0.1')
+        print('started')
+
 
 
 if __name__ == '__main__':

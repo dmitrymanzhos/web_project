@@ -1,8 +1,8 @@
-from flask import Flask
+from .main import flask
 
 
 def run_app():
-    app = Flask(__name__)
+    app = flask.Flask(__name__)
 
     @app.route('/')
     def start():
@@ -15,3 +15,6 @@ def run_app():
     if __name__ == '__main__':
         app.run(port=8080, host='127.0.0.1')
         print('started')
+
+
+run_app()
