@@ -1,5 +1,5 @@
 #!flask/bin/python
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, redirect, jsonify
 from flask_login import LoginManager
 from tech import db_session, users
 from forms.user_form import RegisterForm, EnterForm
@@ -18,12 +18,21 @@ def home_page():
 @app.route('/reg')
 def reg():
     form = RegisterForm()
+    if form.validate_on_submit():
+        # обращение к бд
+        return redirect('/')
+        pass
     return render_template('register_form.html', form=form)
 
 
 @app.route('/success')
 def success():
     return render_template('success.html')
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 
 if __name__ == '__main__':

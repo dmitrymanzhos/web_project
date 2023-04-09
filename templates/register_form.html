@@ -5,8 +5,8 @@
 <br>
 <form class="form-horizontal" action="" method="post">
     <p>
-        {{ form.name.label }}<br>
-        {{ form.name(class="form-control") }}<br>
+        {{ form.nicname.label }}<br>
+        {{ form.nicname(class="form-control") }}<br>
     </p>
     <p>
         {{ form.email.label }}<br>
@@ -18,10 +18,10 @@
     </p>
     <p>
         {{form.password.label }}
-        {{ form.password(class="form-control", type="password" }}
+        {{ form.password(class="form-control", type="password") }}
     </p>
     <p>
-        {{ form.submit(type="submit", class="btn btn-primary"
+        {{ form.submit(type="submit", class="btn btn-primary") }}
     </p>
     {{ message }}
 </form>
