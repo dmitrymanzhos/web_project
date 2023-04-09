@@ -2,6 +2,7 @@
 from flask import Flask, render_template, jsonify
 from flask_login import LoginManager
 from tech import db_session, users
+from forms.user_form import RegisterForm, EnterForm
 
 app = Flask(__name__, template_folder='templates')
 # login_manager = LoginManager()
@@ -16,7 +17,13 @@ def home_page():
 
 @app.route('/reg')
 def reg():
-    return render_template()
+    form = RegisterForm()
+    return render_template('register_form.html', form=form)
+
+
+@app.route('/success')
+def success():
+    return render_template('success.html')
 
 
 if __name__ == '__main__':

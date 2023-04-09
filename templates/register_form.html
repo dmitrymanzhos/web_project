@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<h1>REGISTRATION</h1>
+<br>
+<form class="form-horizontal" action="" method="post">
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name(class="form-control") }}<br>
+    </p>
+    <p>
+        {{ form.email.label }}<br>
+        {{ form.email(class="form-control", type="email") }}<br>
+    </p>
+    <p>
+        {{ form.age.label }}<br>
+        {{ form.age(class="form-control", type="integer") }}
+    </p>
+    <p>
+        {{form.password.label }}
+        {{ form.password(class="form-control", type="password" }}
+    </p>
+    <p>
+        {{ form.submit(type="submit", class="btn btn-primary"
+    </p>
+    {{ message }}
+</form>
+{% endblock %}
