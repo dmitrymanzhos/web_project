@@ -4,6 +4,7 @@
 <h1>REGISTRATION</h1>
 <br>
 <form class="form-horizontal" action="" method="post">
+    {{ form.hidden_tag() }}
     <p>
         {{ form.nicname.label }}<br>
         {{ form.nicname(class="form-control") }}<br>
@@ -14,7 +15,7 @@
     </p>
     <p>
         {{ form.age.label }}<br>
-        {{ form.age(class="form-control", type="integer") }}
+        {{ form.age(class="form-control") }}
     </p>
     <p>
         {{form.password.label }}

@@ -12,6 +12,6 @@ class RegisterForm(FlaskForm):
 
 
 class EnterForm(FlaskForm):
-    nicame = StringField('Никнейм', validators=[DataRequired()])
+    nicname = StringField('Никнейм', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
     submit = SubmitField('Войти')

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
@@ -10,10 +10,15 @@
     <title>Title.....</title>
 </head>
 <body>
-<p>Name:{{ name }}</p>
-<p>
-    <a class="btn btn-large btn-success" href="/success">OK</a>
-</p>
-<a class="btn btn-success" href="/reg">reg</a>
+<main role="main" class="container">
+    <p>
+        <h1>Name:{{ name }}</h1>
+    </p>
+    <p>
+        <a class="btn btn-large btn-success" href="/success">OK</a>
+    </p>
+    <a class="btn btn-success" href="/reg">reg</a>
+    <a class="btn" href="/enter">Enter</a>
+</main>
 </body>
 </html>
