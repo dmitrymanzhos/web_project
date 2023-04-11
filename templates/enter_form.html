@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<h1>REGISTRATION</h1>
+<br>
+<form class="form-horizontal" action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.nicname.label }}<br>
+        {{ form.nicname(class="form-control") }}<br>
+    </p>
+    <p>
+        {{form.password.label }}
+        {{ form.password(class="form-control", type="password") }}
+    </p>
+    <p>
+        {{ form.submit(type="submit", class="btn btn-primary") }}
+    </p>
+    {{ message }}
+</form>
+{% endblock %}
