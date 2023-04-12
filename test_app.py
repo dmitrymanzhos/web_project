@@ -1,13 +1,21 @@
 #!flask/bin/python
-from flask import Flask, render_template, redirect, request, jsonify
-from flask_login import LoginManager, login_user, login_required
-from tech import db_session, users
-from forms.user_form import RegisterForm, EnterForm
+# import cgi
+import os
 
+from flask import Flask, render_template, redirect, request, flash, url_for, send_from_directory
+from flask_login import LoginManager, login_user
+from werkzeug.utils import secure_filename
+
+from forms.user_form import RegisterForm, EnterForm
+# from forms.images_form import UploadForm, photos
+from tech import db_session, users
+
+UPLOAD_FOLDER = os.path.abspath('data')
 app = Flask(__name__, template_folder='templates')
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.secret_key = 'secret_key'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @login_manager.user_loader
@@ -81,6 +89,60 @@ def enter():
 @app.route('/secret')
 def secret():
     pass
+
+
+@app.route('/add_image', methods=['GET', 'POST'])
+def add_image():
+    # form = UploadForm()
+    # if form.validate_on_submit():
+    #     filename = photos.save(form.photo.data)
+    #     file_url = photos.url(filename)
+    # else:
+    #     file_url = None
+    # return render_template('add_image.html', form=form, file_url=file_url)
+
+    # if request.method == 'POST':
+    #     form = cgi.FieldStorage()
+    #     fileitem = form.getfirst('filename')
+    #     print(fileitem)
+    #     if fileitem.filename:
+    #         fn = os.path.basename(fileitem.filename)
+    #
+    #         # open read and write the file into the server
+    #         open(fn, 'wb').write(fileitem.file.read())
+    #         return redirect('/success')
+
+    if request.method == 'POST':
+        print('.')
+        if 'f' not in request.files:
+            # После перенаправления на страницу загрузки
+            # покажем сообщение пользователю
+            flash('Не могу прочитать файл')
+            return redirect(request.url)
+        print(1)
+        file = request.files['f']
+        print(2)
+        # Если файл не выбран, то браузер может
+        # отправить пустой файл без имени.
+        if file.filename == '':
+            flash('Нет выбранного файла')
+            return redirect(request.url)
+        if file:
+            # безопасно извлекаем оригинальное имя файла
+            filename = secure_filename(file.filename)
+            # сохраняем файл
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # если все прошло успешно, то перенаправляем
+            # на функцию-представление `download_file`
+            # для скачивания файла
+            return redirect(url_for('download_file', name=filename))
+
+    return render_template('add_image.html')
+
+
+@app.route('/uploads/<name>')
+def download_file(name):
+    return send_from_directory(app.config["UPLOAD_FOLDER"], name)
 
 
 if __name__ == '__main__':
