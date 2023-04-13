@@ -1,14 +1,13 @@
-#!flask/bin/python
-# import cgi
 import os
+from io import BytesIO
 
 from flask import Flask, render_template, redirect, request, flash, url_for, send_from_directory
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, current_user
 from werkzeug.utils import secure_filename
 
 from forms.user_form import RegisterForm, EnterForm
 # from forms.images_form import UploadForm, photos
-from tech import db_session, users
+from tech import db_session, users, images
 
 UPLOAD_FOLDER = os.path.abspath('data')
 app = Flask(__name__, template_folder='templates')
@@ -26,7 +25,7 @@ def load_user(user_id):
 
 @app.route('/')
 def home_page():
-    return render_template('index.html', name='abanon')
+    return render_template('index.html', name=current_user)
 
 
 @app.route('/reg', methods=['GET', 'POST'])
@@ -79,7 +78,7 @@ def enter():
             return render_template('enter_form.html', form=form, message='Такой пользователь не зарегистрирован')
         user = db_sess.query(users.User).filter(users.User.nicname == form.nicname.data).first()
         if user.check_password(form.password.data):
-            login_user(user)
+            login_user(user, remember=True)
             return redirect('/success')
         else:
             return render_template('enter_form.html', form=form, message='Неверный пароль')
@@ -121,7 +120,7 @@ def add_image():
             return redirect(request.url)
         print(1)
         file = request.files['f']
-        print(2)
+        print(type(file))
         # Если файл не выбран, то браузер может
         # отправить пустой файл без имени.
         if file.filename == '':
@@ -131,11 +130,20 @@ def add_image():
             # безопасно извлекаем оригинальное имя файла
             filename = secure_filename(file.filename)
             # сохраняем файл
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            data = BytesIO()  # ?
+            file.save(data)
+            db_sess = db_session.create_session()
+            data.seek(0)
+            image = images.Image()
+            image.content = data.read()
+            current_user.images.append(image)
+            db_sess.merge(current_user)
+            db_sess.commit()
             # если все прошло успешно, то перенаправляем
             # на функцию-представление `download_file`
             # для скачивания файла
-            return redirect(url_for('download_file', name=filename))
+            return redirect('/success')
+            # return redirect(url_for('download_file', name=filename))
 
     return render_template('add_image.html')
 
