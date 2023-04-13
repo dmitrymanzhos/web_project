@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<h1>main</h1>
+    {% for item in images %}
+        <div class="col-md6 border rounded">
+            <h2>{{ item.title }}</h2>
+            <div>
+                <img src="{{ item.filepath }}">
+            </div>
+            <div>
+                Автор - {{ item.user.nicname }}, Дата написания - {{ item.created_date }}
+            </div>
+            {% if current_user.is_authenticated and current_user == item.user %}
+                <div>
+                    <a href="/" class="btn btn-warning">Изменить</a>
+                    <a href="/" class="btn btn-danger">Удалить</a>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

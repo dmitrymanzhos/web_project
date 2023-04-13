@@ -1,6 +1,6 @@
 import os
 from io import BytesIO
-
+from PIL import Image
 from flask import Flask, render_template, redirect, request, flash, url_for, send_from_directory
 from flask_login import LoginManager, login_user, current_user
 from werkzeug.utils import secure_filename
@@ -23,8 +23,12 @@ def load_user(user_id):
     return db_sess.query(users.User).get(user_id)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home_page():
+    if current_user.is_authenticated:
+        db_sess = db_session.create_session()
+        imgs = db_sess.query(images.Image).filter(images.Image.user == current_user)
+        return render_template('all_images.html', images=imgs)
     return render_template('index.html', name=current_user)
 
 
@@ -119,7 +123,9 @@ def add_image():
             flash('Не могу прочитать файл')
             return redirect(request.url)
         print(1)
+        print(current_user)
         file = request.files['f']
+        # private = request.files['private']
         print(type(file))
         # Если файл не выбран, то браузер может
         # отправить пустой файл без имени.
@@ -130,14 +136,16 @@ def add_image():
             # безопасно извлекаем оригинальное имя файла
             filename = secure_filename(file.filename)
             # сохраняем файл
-            data = BytesIO()  # ?
-            file.save(data)
+            file.save(os.path.join('static/img/' + filename))
             db_sess = db_session.create_session()
-            data.seek(0)
             image = images.Image()
-            image.content = data.read()
+            print('?')
+            image.filepath = os.path.join("/static/img/", filename)
+            print('!')
             current_user.images.append(image)
+            print(11)
             db_sess.merge(current_user)
+            print(12)
             db_sess.commit()
             # если все прошло успешно, то перенаправляем
             # на функцию-представление `download_file`
