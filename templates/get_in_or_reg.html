@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<h1>ENTER</h1>
+<br>
+<form class="transparent" action="" method="post">
+    <div class="form-inner">
+        <main role="main" class="container">
+        <p>
+            <h1>Name:{{ name }}</h1>
+        </p>
+        <p>
+            <a class="btn btn-large btn-success" href="/success">OK</a>
+        </p>
+        <a class="btn-success" href="/registration">Зарегистрироваться</a>
+        <br>
+        <a class="btn-success" href="/enter">Войти</a>
+        </main>
+    </div>
+
+</form>
+{% endblock %}

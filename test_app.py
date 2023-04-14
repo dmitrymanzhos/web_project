@@ -29,7 +29,7 @@ def home_page():
         db_sess = db_session.create_session()
         imgs = db_sess.query(images.Image).filter(images.Image.user == current_user)
         return render_template('all_images.html', images=imgs)
-    return render_template('index.html', name=current_user)
+    return render_template('get_in_or_reg.html', name=current_user, title="Outgramm5")
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -154,7 +154,7 @@ def add_image():
             return redirect('/success')
             # return redirect(url_for('download_file', name=filename))
 
-    return render_template('add_image.html')
+    return render_template('add_image.html', title="Add image")
 
 
 @app.route('/uploads/<name>')

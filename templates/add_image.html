@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<br>
 {% if current_user.is_authenticated %}
    <h1>Add image</h1>
    <br>
-   <form class="form-horizontal" enctype="multipart/form-data" action="" method="post">
-      <p><input type="file" name="f" accept=".jpg, .jpeg, .phg" ></p>
-      <p><input type="checkbox" name="private">Private</p>
-      <p><input type="submit" value="Отправить"></p>
-
+   <form class="transparent" enctype="multipart/form-data" action="" method="post">
+      <div class="form-inner">
+         <p><input type="file" name="f" accept=".jpg, .jpeg, .phg" ></p>
+         <p><input type="checkbox" name="private">Private</p>
+         <p><input type="submit" value="Отправить"></p>
+      </div>
    </form>
 {% else %}
    <h1>Вы должны быть зарегистрированы</h1>
