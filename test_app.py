@@ -32,24 +32,24 @@ def home_page():
     return render_template('index.html', name=current_user)
 
 
-@app.route('/reg', methods=['GET', 'POST'])
+@app.route('/registration', methods=['GET', 'POST'])
 def reg():
     form = RegisterForm()
     print(1)
     if form.validate_on_submit():
         print(2)
         if not type(form.age.data) == int:
-            return render_template('register_form.html', form=form,
+            return render_template('register_form.html', form=form, title='Регистрация',
                                    message='Неверно указан возраст')
         elif form.age.data not in range(0, 100):
-            return render_template('register_form.html', form=form,
+            return render_template('register_form.html', form=form, title='Регистрация',
                                    message='Неверно указан возраст')
         db_sess = db_session.create_session()
         if db_sess.query(users.User).filter(users.User.nicname == form.nicname.data).first():
-            return render_template('register_form.html', form=form,
+            return render_template('register_form.html', form=form, title='Регистрация',
                                    message='Пользователь с таким никнеймом уже существует')
         elif db_sess.query(users.User).filter(users.User.email == form.email.data).first():
-            return render_template('register_form.html', form=form,
+            return render_template('register_form.html', form=form, title='Регистрация',
                                    message='Пользователь с такой почтой уже существует')
         else:
             user = users.User(
@@ -60,7 +60,7 @@ def reg():
             db_sess.commit()
 
             return redirect('/enter')
-    return render_template('register_form.html', form=form)
+    return render_template('register_form.html', form=form, title='Регистрация')
 
 
 @app.route('/success')
@@ -79,14 +79,15 @@ def enter():
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         if not db_sess.query(users.User).filter(users.User.nicname == form.nicname.data).first():
-            return render_template('enter_form.html', form=form, message='Такой пользователь не зарегистрирован')
+            return render_template('enter_form.html', form=form, message='Такой пользователь не зарегистрирован',
+                                   title='Вход')
         user = db_sess.query(users.User).filter(users.User.nicname == form.nicname.data).first()
         if user.check_password(form.password.data):
             login_user(user, remember=True)
             return redirect('/success')
         else:
-            return render_template('enter_form.html', form=form, message='Неверный пароль')
-    return render_template('enter_form.html', form=form)
+            return render_template('enter_form.html', form=form, message='Неверный пароль', title='Вход')
+    return render_template('enter_form.html', form=form, title='Вход')
 
 
 @app.route('/secret')
