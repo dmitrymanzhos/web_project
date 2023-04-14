@@ -4,7 +4,6 @@ from flask_login import LoginManager, login_user, current_user, login_required, 
 from werkzeug.utils import secure_filename
 
 from forms.user_form import RegisterForm, EnterForm
-# from forms.images_form import UploadForm, photos
 from tech import db_session, users, images
 
 UPLOAD_FOLDER = os.path.abspath('data')
@@ -83,16 +82,6 @@ def reg():
     return render_template('register_form.html', form=form, title='Регистрация')
 
 
-@app.route('/success')
-def success():
-    return render_template('success.html')
-
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-
 @app.route('/enter', methods=['GET', 'POST'])
 def enter():
     form = EnterForm()
@@ -110,33 +99,9 @@ def enter():
     return render_template('enter_form.html', form=form, title='Вход')
 
 
-@app.route('/secret')
-def secret():
-    pass
-
-
 @app.route('/add_image', methods=['GET', 'POST'])
 @login_required
 def add_image():
-    # form = UploadForm()
-    # if form.validate_on_submit():
-    #     filename = photos.save(form.photo.data)
-    #     file_url = photos.url(filename)
-    # else:
-    #     file_url = None
-    # return render_template('add_image.html', form=form, file_url=file_url)
-
-    # if request.method == 'POST':
-    #     form = cgi.FieldStorage()
-    #     fileitem = form.getfirst('filename')
-    #     print(fileitem)
-    #     if fileitem.filename:
-    #         fn = os.path.basename(fileitem.filename)
-    #
-    #         # open read and write the file into the server
-    #         open(fn, 'wb').write(fileitem.file.read())
-    #         return redirect('/success')
-
     if request.method == 'POST':
         print('.')
         if 'f' not in request.files:
@@ -173,8 +138,6 @@ def add_image():
             # на функцию-представление `download_file`
             # для скачивания файла
             return redirect('/profile')
-            # return redirect(url_for('download_file', name=filename))
-
     return render_template('add_image.html', title="Добавление фото")
 
 
@@ -191,11 +154,6 @@ def news_delete(img_id):
     else:
         abort(404)
     return redirect('/profile')
-
-
-@app.route('/uploads/<name>')
-def download_file(name):
-    return send_from_directory(app.config["UPLOAD_FOLDER"], name)
 
 
 if __name__ == '__main__':
