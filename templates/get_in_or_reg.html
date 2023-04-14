@@ -1,17 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<br>
-<h1 class="centered_text">ENTER</h1>
-<br>
 <form class="transparent" action="" method="post">
     <div class="form-inner">
         <main role="main" class="container">
         <p>
-            <h1 class="centered_text">Name:{{ name }}</h1>
+            <h1 class="centered_text">Нужно войти в систему</h1>
         </p>
         <p>
-            <a class="btn btn-large btn-success" href="/success">OK</a>
+            <a class="btn-success" href="/info">О приложении</a>
         </p>
+        <br>
         <a class="btn-success" href="/registration">Зарегистрироваться</a>
         <br>
         <a class="btn-success" href="/enter">Войти</a>

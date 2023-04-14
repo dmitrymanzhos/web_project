@@ -1,12 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 {% if current_user.is_authenticated %}
-   <h1>Add image</h1>
-   <br>
    <form class="transparent" enctype="multipart/form-data" action="" method="post">
       <div class="form-inner">
          <p class="centered_text"><input type="file" name="f" accept=".jpg, .jpeg, .phg" ></p>
-         <p class="centered_text"><input type="checkbox" name="private" value="Private">Private</p>
          <p class="centered_text"><input type="submit" value="Отправить"></p>
       </div>
    </form>

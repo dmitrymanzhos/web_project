@@ -77,39 +77,34 @@ body {
    line-height: 20px;
    text-align: center;
    vertical-align: middle;
-   max-width: 1000px;
    width: 100%;
    margin: 10px 0 15px;
    border-width: 0;
    line-height: 40px;
    border-radius: 20px;
    color: white;
-   background: rgba(255, 255, 255, .6);
    box-sizing: border-box;
    font-family: 'Roboto', sans-serif;
    font-size: 80%;
    background: #1862EE;
 }
-.centered_btn {
-    display: flex;
-    justify-content: center;
-    line-height: 20px;
+div {
     text-align: center;
-    vertical-align: middle;
-    max-width: 1000px;
-    width: 100%;
+}
+.centered_btn {
+    max-width: 300px;
+    width: 180%;
+    text-align: center;
     margin: 10px 0 15px;
-    border-width: 0;
     line-height: 40px;
     border-radius: 20px;
     color: white;
-    background: rgba(255, 255, 255, .6);
     font-family: 'Roboto', sans-serif;
     font-size: 80%;
     background: #1862EE;
 }
 a {
- text-decoration: none;
+    text-decoration: none;
 }
 .displayed {
     display: block;
@@ -125,7 +120,7 @@ a {
 }
 .centered_text {
     font-family: 'Roboto', sans-serif;
-    text-align: center
+    text-align: center;
 }
 .topnav a {
     width: 320px;

@@ -1,6 +1,4 @@
 import os
-from io import BytesIO
-from PIL import Image
 from flask import Flask, render_template, redirect, request, flash, url_for, send_from_directory, abort
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from werkzeug.utils import secure_filename
@@ -47,6 +45,11 @@ def profile():
         usr = db_sess.query(users.User).filter(users.User == current_user).first()
         imgs = db_sess.query(images.Image).filter(images.Image.user == current_user)
         return render_template('profile.html', images=imgs, user=current_user, title="Профиль")
+
+
+@app.route('/info')
+def info():
+    return render_template('info.html', title="О приложении")
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -101,7 +104,7 @@ def enter():
         user = db_sess.query(users.User).filter(users.User.nicname == form.nicname.data).first()
         if user.check_password(form.password.data):
             login_user(user, remember=True)
-            return redirect('/success')
+            return redirect('/')
         else:
             return render_template('enter_form.html', form=form, message='Неверный пароль', title='Вход')
     return render_template('enter_form.html', form=form, title='Вход')
@@ -169,10 +172,10 @@ def add_image():
             # если все прошло успешно, то перенаправляем
             # на функцию-представление `download_file`
             # для скачивания файла
-            return redirect('/success')
+            return redirect('/profile')
             # return redirect(url_for('download_file', name=filename))
 
-    return render_template('add_image.html', title="Add image")
+    return render_template('add_image.html', title="Добавление фото")
 
 
 @app.route('/image_delete/<int:img_id>', methods=['GET', 'POST'])
