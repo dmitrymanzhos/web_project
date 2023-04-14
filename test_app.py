@@ -1,8 +1,8 @@
 import os
 from io import BytesIO
 from PIL import Image
-from flask import Flask, render_template, redirect, request, flash, url_for, send_from_directory
-from flask_login import LoginManager, login_user, current_user
+from flask import Flask, render_template, redirect, request, flash, url_for, send_from_directory, abort
+from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from werkzeug.utils import secure_filename
 
 from forms.user_form import RegisterForm, EnterForm
@@ -23,13 +23,30 @@ def load_user(user_id):
     return db_sess.query(users.User).get(user_id)
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
     if current_user.is_authenticated:
         db_sess = db_session.create_session()
+        imgs = db_sess.query(images.Image)
+        return render_template('all_images.html', images=imgs, title="Главная")
+    return render_template('get_in_or_reg.html', name=current_user, title="Главная")
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    if current_user.is_authenticated:
+        db_sess = db_session.create_session()
+        usr = db_sess.query(users.User).filter(users.User == current_user).first()
         imgs = db_sess.query(images.Image).filter(images.Image.user == current_user)
-        return render_template('all_images.html', images=imgs)
-    return render_template('get_in_or_reg.html', name=current_user, title="Outgramm5")
+        return render_template('profile.html', images=imgs, user=current_user, title="Профиль")
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -96,6 +113,7 @@ def secret():
 
 
 @app.route('/add_image', methods=['GET', 'POST'])
+@login_required
 def add_image():
     # form = UploadForm()
     # if form.validate_on_submit():
@@ -155,6 +173,21 @@ def add_image():
             # return redirect(url_for('download_file', name=filename))
 
     return render_template('add_image.html', title="Add image")
+
+
+@app.route('/image_delete/<int:img_id>', methods=['GET', 'POST'])
+@login_required
+def news_delete(img_id):
+    db_sess = db_session.create_session()
+    image = db_sess.query(images.Image).filter(images.Image.id == img_id, images.Image.user == current_user).first()
+    if image:
+        if os.path.isfile(image.filepath[1:]):
+            os.remove(image.filepath[1:])
+            db_sess.delete(image)
+            db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/profile')
 
 
 @app.route('/uploads/<name>')
