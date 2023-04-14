@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+    <p>
+        <div class="centered_text">
+            Никнейм - {{ user.nicname }}, Почта - {{ user.email }}
+        <div>
+            <a href="/logout" class="btn-success">Выйти из профиля</a>
+            <a href="/add_image" class="btn-success">Добавить фото</a>
+        </div>
+        </div>
+    </p>
+    {% for item in images %}
+        <div class="block">
+            <div>
+                <img class="displayed" src="{{ item.filepath }}">
+            </div>
+            <div class="centered_text">
+                Дата загрузки - {{ item.created_date }}
+            </div>
+        </div>
+        <div class="centered_text">
+            <a href="/image_delete/{{ item.id }}" class="centered_btn">Удалить</a>
+        </div>
+    {% endfor %}
+{% endblock %}

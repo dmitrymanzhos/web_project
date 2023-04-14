@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <link rel="stylesheet" href="/static/styles/styles.css">
+    <title>{{ title }}</title>
+</head>
+{% if current_user.is_authenticated %}
+    <div class="topnav">
+      <a class="active centered_text" href="/">Главная</a>
+      <a class="centered_text" href="/profile">Профиль</a>
+      <a class="centered_text" href="/info">О приложении</a>
+    </div>
+{% endif %}
+<body>
+<main role="main" class="container">
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

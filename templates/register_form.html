@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<form class="transparent" action="" method="post">
+    <div class="form-inner">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.nicname.label }}<br>
+        {{ form.nicname(class="form-control") }}<br>
+    </p>
+    <p>
+        {{ form.email.label }}<br>
+        {{ form.email(class="form-control", type="email") }}<br>
+    </p>
+    <p>
+        {{ form.age.label }}<br>
+        {{ form.age(class="form-control") }}
+    </p>
+    <p>
+        {{form.password.label }}
+        {{ form.password(class="form-control", type="password") }}
+    </p>
+    <p>
+        {{ form.submit(type="submit", class="btn btn-primary") }}
+    </p>
+    {{ message }}
+    </div>
+</form>
+{% endblock %}
