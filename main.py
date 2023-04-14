@@ -1,16 +1,5 @@
-import os
 from telegram.ext import CommandHandler
-import logging
-from telegram.ext import Application, MessageHandler, filters
-import datetime
-from subprocess import Popen
-import flask
-from multiprocessing import Process
-server = Process(target=app.run)
-server.start()
-# ...
-server.terminate()
-server.join()
+
 
 with open('data/APIKEY.txt', encoding='utf-8') as f:
     APIKEY = f.read().rstrip('\n')
