@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, request, flash, url_for, send_from_directory, abort
+from flask import Flask, render_template, redirect, request, flash, abort
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from werkzeug.utils import secure_filename
 
@@ -7,7 +7,7 @@ from forms.user_form import RegisterForm, EnterForm
 from tech import db_session, users, images
 
 UPLOAD_FOLDER = os.path.abspath('static')
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates')  # инициализация
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.secret_key = 'secret_key'
@@ -15,48 +15,45 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 @login_manager.user_loader
-def load_user(user_id):
+def load_user(user_id):  # загрузка пользователя по id
     db_sess = db_session.create_session()
     return db_sess.query(users.User).get(user_id)
 
 
 @app.route('/logout')
 @login_required
-def logout():
+def logout():  # выход из профиля
     logout_user()
     return redirect("/")
 
 
 @app.route('/', methods=['GET', 'POST'])
-def home_page():
+def home_page():  # главная страница
     if current_user.is_authenticated:
         db_sess = db_session.create_session()
         imgs = db_sess.query(images.Image)
         return render_template('all_images.html', images=imgs, title="Главная")
-    return render_template('get_in_or_reg.html', name=current_user, title="Главная")
+    return render_template('get_in_or_reg.html', name=current_user, title="Главная")  # если пользователь не зарег.
 
 
 @app.route('/profile')
 @login_required
-def profile():
+def profile():  # страница профиля
     if current_user.is_authenticated:
         db_sess = db_session.create_session()
-        usr = db_sess.query(users.User).filter(users.User == current_user).first()
         imgs = db_sess.query(images.Image).filter(images.Image.user == current_user)
         return render_template('profile.html', images=imgs, user=current_user, title="Профиль")
 
 
 @app.route('/info')
-def info():
+def info():  # о приложении
     return render_template('info.html', title="О приложении")
 
 
 @app.route('/registration', methods=['GET', 'POST'])
-def reg():
+def reg():  # регистрация
     form = RegisterForm()
-    print(1)
-    if form.validate_on_submit():
-        print(2)
+    if form.validate_on_submit():   # при нажатии
         if not type(form.age.data) == int:
             return render_template('register_form.html', form=form, title='Регистрация',
                                    message='Неверно указан возраст')
@@ -101,7 +98,7 @@ def enter():
 
 @app.route('/add_image', methods=['GET', 'POST'])
 @login_required
-def add_image():
+def add_image():  # добавление изображения
     if request.method == 'POST':
         print('.')
         if 'f' not in request.files:
@@ -132,7 +129,7 @@ def add_image():
 
 @app.route('/image_delete/<int:img_id>', methods=['GET', 'POST'])
 @login_required
-def news_delete(img_id):
+def image_delete(img_id):  # удаление фото
     db_sess = db_session.create_session()
     image = db_sess.query(images.Image).filter(images.Image.id == img_id, images.Image.user == current_user).first()
     if image:
