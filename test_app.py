@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from forms.user_form import RegisterForm, EnterForm
 from tech import db_session, users, images
 
-UPLOAD_FOLDER = os.path.abspath('data')
+UPLOAD_FOLDER = os.path.abspath('static')
 app = Flask(__name__, template_folder='templates')
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -109,11 +109,7 @@ def add_image():
             # покажем сообщение пользователю
             flash('Не могу прочитать файл')
             return redirect(request.url)
-        print(1)
-        print(current_user)
         file = request.files['f']
-        # private = request.files['private']
-        print(type(file))
         # Если файл не выбран, то браузер может
         # отправить пустой файл без имени.
         if file.filename == '':
@@ -126,17 +122,10 @@ def add_image():
             file.save(os.path.join('static/img/' + filename))
             db_sess = db_session.create_session()
             image = images.Image()
-            print('?')
             image.filepath = os.path.join("/static/img/", filename)
-            print('!')
             current_user.images.append(image)
-            print(11)
             db_sess.merge(current_user)
-            print(12)
             db_sess.commit()
-            # если все прошло успешно, то перенаправляем
-            # на функцию-представление `download_file`
-            # для скачивания файла
             return redirect('/profile')
     return render_template('add_image.html', title="Добавление фото")
 
